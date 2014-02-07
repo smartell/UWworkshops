@@ -75,7 +75,7 @@ $(EXEC).cpp: $(TPLS)
 
 clean: 
 	$(RM) $(OBJS) $(EXEC).cpp $(EXEC).htp $(DEPS) $(EXEC)
-	$(RM) $(EXEC).[bcelprs]* eigv.rpt fmin.log variance admodel.[cdh]*
+	$(RM) $(EXEC).[belprs]* eigv.rpt fmin.log variance admodel.[cdh]* $(EXEC).cor
 
 
 # generate some information about what your are doing

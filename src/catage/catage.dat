@@ -29,3 +29,6 @@
  9.857 9.093 6.571 9.508 9.358 9.892 7.833 7.936 11.229 14.042 13.329 11.854 
 #
     0.3
+# Contorl File
+#Lower Bound   Upper Bound   Phase   #Paramter
+0               15           2       #log_popscale

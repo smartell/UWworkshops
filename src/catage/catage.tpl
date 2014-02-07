@@ -37,14 +37,18 @@ DATA_SECTION
   init_matrix obs_catch_at_age(1,nyrs,1,nages)
   init_vector effort(1,nyrs)
   init_number M
+  //parameter control
+  init_vector log_popscale_ctl(1,3);
   vector relwt(2,nages);
 INITIALIZATION_SECTION
   log_q -1
   log_popscale 5
 PARAMETER_SECTION
-  init_number log_q(1)
-  init_number log_popscale(1)
-  init_bounded_dev_vector log_sel_coff(1,nages-1,-15.,15.,2)
+  init_number log_q(1);
+  //init_number log_popscale(1);
+  init_bounded_number log_popscale(log_popscale_ctl);
+
+  init_bounded_dev_vector log_sel_coff(1,nages-1,-15.,15.,2);
   init_bounded_dev_vector log_relpop(1,nyrs+nages-1,-15.,15.,2)
   init_bounded_dev_vector effort_devs(1,nyrs,-5.,5.,3)
   vector log_sel(1,nages)
