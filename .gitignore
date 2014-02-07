@@ -1,1 +1,14 @@
 *.sublime-project
+
+*.psv
+*.cor
+*.rep
+*.par
+*.std
+*.mcmc
+*.mcrt
+*.mcst
+*.sim
+*.proj
+*.d
+*.o
