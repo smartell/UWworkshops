@@ -91,12 +91,15 @@ PROCEDURE_SECTION
 FUNCTION get_mortality_and_survivial_rates
   int i, j;
   // calculate the selectivity from the sel_coffs
-  for (j=1;j<nages;j++)
-  {
-    log_sel(j)=log_sel_coff(j);
-  }
-  // the selectivity is the same for the last two age classes
-  log_sel(nages)=log_sel_coff(nages-1);
+  //for (j=1;j<nages;j++)
+  //{
+  //  log_sel(j)=log_sel_coff(j);
+  //}
+  //// the selectivity is the same for the last two age classes
+  //log_sel(nages)=log_sel_coff(nages-1);
+
+  selex cSelex;
+  log_sel = cSelex.log_selcoff(log_sel_coff);
 
   // This is the same as F(i,j)=exp(q)*effert(i)*exp(log_sel(j));
   F=outer_prod(mfexp(log_q)*effort,mfexp(log_sel));
