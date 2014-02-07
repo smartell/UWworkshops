@@ -30,6 +30,10 @@
 // THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+GLOBALS_SECTION
+	#include <admodel.h>
+	#include "selex.h"
+
 
 DATA_SECTION
   init_int nyrs
@@ -49,24 +53,25 @@ PARAMETER_SECTION
   init_bounded_number log_popscale(log_popscale_ctl);
 
   init_bounded_dev_vector log_sel_coff(1,nages-1,-15.,15.,2);
-  init_bounded_dev_vector log_relpop(1,nyrs+nages-1,-15.,15.,2)
-  init_bounded_dev_vector effort_devs(1,nyrs,-5.,5.,3)
-  vector log_sel(1,nages)
+  init_bounded_dev_vector log_relpop(1,nyrs+nages-1,-15.,15.,2);
+  init_bounded_dev_vector effort_devs(1,nyrs,-5.,5.,3);
+  vector log_sel(1,nages);
   vector log_initpop(1,nyrs+nages-1);
-  matrix F(1,nyrs,1,nages)
-  matrix Z(1,nyrs,1,nages)
-  matrix S(1,nyrs,1,nages)
-  matrix N(1,nyrs,1,nages)
-  matrix C(1,nyrs,1,nages)
-  objective_function_value f
-  number recsum
-  number initsum
-  sdreport_number avg_F
-  sdreport_vector predicted_N(2,nages)
-  sdreport_vector ratio_N(2,nages)
+  matrix F(1,nyrs,1,nages);
+  matrix Z(1,nyrs,1,nages);
+  matrix S(1,nyrs,1,nages);
+  matrix N(1,nyrs,1,nages);
+  matrix C(1,nyrs,1,nages);
+  objective_function_value f;
+  number recsum;
+  number initsum;
+  sdreport_number avg_F;
+  sdreport_vector predicted_N(2,nages);
+  sdreport_vector ratio_N(2,nages);
   // changed from the manual because adjusted likelihood routine doesn't
   // work
-  likeprof_number pred_B
+  likeprof_number pred_B;
+
 PRELIMINARY_CALCS_SECTION
   // this is just to ``invent'' some relative average
   // weight at age numbers
