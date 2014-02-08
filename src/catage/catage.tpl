@@ -30,10 +30,23 @@
 // THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+GLOBALS_SECTION
+	#include <admodel.h>
+	#include "selex.h"
+
+
 
 DATA_SECTION
   init_int nyrs
   init_int nages
+  vector age(1,nages);
+  !! age.fill_seqadd(1,1);
+
+  vector mat(1,nages);
+  !! mat = logistic(age,3,0.5);
+  !! cout<<mat<<endl;
+  !! exit(1);
+
   init_matrix obs_catch_at_age(1,nyrs,1,nages)
   init_vector effort(1,nyrs)
   init_number M
@@ -81,13 +94,27 @@ PROCEDURE_SECTION
 
 FUNCTION get_mortality_and_survivial_rates
   int i, j;
-  // calculate the selectivity from the sel_coffs
-  for (j=1;j<nages;j++)
-  {
-    log_sel(j)=log_sel_coff(j);
-  }
-  // the selectivity is the same for the last two age classes
-  log_sel(nages)=log_sel_coff(nages-1);
+  // // calculate the selectivity from the sel_coffs
+  // for (j=1;j<nages;j++)
+  // {
+  //   log_sel(j)=log_sel_coff(j);
+  // }
+  // // the selectivity is the same for the last two age classes
+  // log_sel(nages)=log_sel_coff(nages-1);
+  
+
+  //log_sel = selcoff(log_sel_coff);
+  selex cMySelex;
+  selex cMyAgeSelex(age);
+
+  //log_sel = cMySelex.selcoff(log_sel_coff);
+
+  dvariable mu = exp(log_sel_coff(1));
+  dvariable std = exp(log_sel_coff(2));
+  log_sel = log(cMyAgeSelex.plogis(mu,std));
+
+  //cout<<cMyAgeSelex.get_mu()<<endl;
+  //cout<<cMyAgeSelex.get_std()<<endl;
 
   // This is the same as F(i,j)=exp(q)*effert(i)*exp(log_sel(j));
   F=outer_prod(mfexp(log_q)*effort,mfexp(log_sel));

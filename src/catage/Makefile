@@ -10,7 +10,7 @@
 # 5. Optimized executables type: make OPT=TRUE                 #
 # ———————————————————————————————————————————————————————————— #
 EXEC = catage
-SRCS = $(EXEC).cpp 
+SRCS = $(EXEC).cpp selex.cpp
 OBJS = $(SRCS:.cpp=.o)
 TPLS = $(EXEC).tpl
 DEPS = $(SRCS:.cpp=.d)
