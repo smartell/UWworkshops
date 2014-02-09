@@ -32,7 +32,8 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 GLOBALS_SECTION
 	#include <admodel.h>
-	#include "selex.h"
+	//#include "selex.h"
+	#include "selex.hpp"
 
 
 DATA_SECTION
@@ -44,6 +45,14 @@ DATA_SECTION
   //parameter control
   init_vector log_popscale_ctl(1,3);
   vector relwt(2,nages);
+
+	LOCAL_CALCS
+	  slx::Selex<double>* ptr;  //pointer to selectivity
+	  ptr = new slx::Logistic<double>();
+	  cout << ptr->Selectivity(1.0) << "\n";
+	  delete ptr;
+	END_CALCS
+
 INITIALIZATION_SECTION
   log_q -1
   log_popscale 5
@@ -98,8 +107,17 @@ FUNCTION get_mortality_and_survivial_rates
   //// the selectivity is the same for the last two age classes
   //log_sel(nages)=log_sel_coff(nages-1);
 
-  selex cSelex;
-  log_sel = cSelex.log_selcoff(log_sel_coff);
+  //selex cSelex;
+  //log_sel = cSelex.log_selcoff(log_sel_coff);
+
+  slx::Selex<dvariable>* ptr;  //pointer to selectivity
+
+  ptr = new slx::Logistic<dvariable>();
+
+  cout << ptr->Selectivity(3.0) << "\n";
+
+  delete ptr;
+  exit(1);
 
   // This is the same as F(i,j)=exp(q)*effert(i)*exp(log_sel(j));
   F=outer_prod(mfexp(log_q)*effort,mfexp(log_sel));
