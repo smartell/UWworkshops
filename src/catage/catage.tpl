@@ -43,9 +43,9 @@ DATA_SECTION
   !! age.fill_seqadd(1,1);
 
   vector mat(1,nages);
-  !! mat = logistic(age,3,0.5);
-  !! cout<<mat<<endl;
-  !! exit(1);
+  //!! mat = logistic(age,3,0.5);
+  //!! cout<<mat<<endl;
+  //!! exit(1);
 
   init_matrix obs_catch_at_age(1,nyrs,1,nages)
   init_vector effort(1,nyrs)
