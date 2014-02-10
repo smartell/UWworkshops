@@ -5,14 +5,28 @@
 
 #include <admodel.h>
 
+/**
+ * @defgroup Selectivities
+ * @Selectivities All of the alternative selectivity functions in the SLX namespace are
+ * derived from the slx::Selex base class.  
+ * 
+ * @author Steven Martell
+ * @date   Feb 10, 2014
+ * 
+ * <br> Available Selectivity options are: <br><br>
+ * <br>Selectivity              FUNCTIONS                Class name
+ * <br>Logistic                 plogis                   LogisticCurve
+ */
 namespace slx {
 	
 	template<class T>
 	class Selex
 	{
+
 	public:
 		virtual  const T Selectivity(const T &x) const = 0;
 		
+		virtual ~Selex(){}
 	};
 
 
@@ -24,14 +38,14 @@ namespace slx {
 
 
 	template<class T>
-	class Logistic: public Selex<T>
+	class LogisticCurve: public Selex<T>
 	{
 	private:
 		T m_mean;
 		T m_std;
 
 	public:
-		Logistic(T mean = T(0), T std = T(1))
+		LogisticCurve(T mean = T(0), T std = T(1))
 		: m_mean(mean), m_std(std) {}
 
 		T GetMean() const { return m_mean; }
@@ -53,4 +67,4 @@ namespace slx {
 }//slx
 
 
-#endif /* SELEX_HPP */
+#endif /* SELEX_HPP */   	

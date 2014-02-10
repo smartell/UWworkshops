@@ -48,7 +48,7 @@ DATA_SECTION
 
 	LOCAL_CALCS
 	  slx::Selex<double>* ptr;  //pointer to selectivity
-	  ptr = new slx::Logistic<double>();
+	  ptr = new slx::LogisticCurve<double>();
 	  cout << ptr->Selectivity(1.0) << "\n";
 	  delete ptr;
 	END_CALCS
@@ -112,7 +112,7 @@ FUNCTION get_mortality_and_survivial_rates
 
   slx::Selex<dvariable>* ptr;  //pointer to selectivity
 
-  ptr = new slx::Logistic<dvariable>();
+  ptr = new slx::LogisticCurve<dvariable>();
 
   cout << ptr->Selectivity(3.0) << "\n";
 
