@@ -45,12 +45,17 @@ DATA_SECTION
   //parameter control
   init_vector log_popscale_ctl(1,3);
   vector relwt(2,nages);
-
+  vector age(1,nages);
 	LOCAL_CALCS
-	  slx::Selex<double>* ptr;  //pointer to selectivity
-	  ptr = new slx::LogisticCurve<double>();
-	  cout << ptr->Selectivity(1.0) << "\n";
+		cout<<"Start"<<endl;
+	  age.fill_seqadd(1,1);
+	  slx::Selex<dvector>* ptr;  //pointer to selectivity
+	  //ptr->Set_x(age);
+	  ptr = new slx::LogisticCurve<dvector,double>(3,1);
+	  cout<< ptr->Selectivity(age)<<endl;
+	  
 	  delete ptr;
+	  //exit(1);
 	END_CALCS
 
 INITIALIZATION_SECTION
@@ -89,6 +94,8 @@ PRELIMINARY_CALCS_SECTION
   relwt/=max(relwt);
 PROCEDURE_SECTION
   // example of using FUNCTION to structure the procedure section
+  get_selectivity();
+
   get_mortality_and_survivial_rates();
 
   get_numbers_at_age();
@@ -97,27 +104,25 @@ PROCEDURE_SECTION
 
   evaluate_the_objective_function();
 
+FUNCTION get_selectivity
+  // calculate the selectivity from the sel_coffs
+  dvariable mu = exp(log_sel_coff(1));
+  dvariable sd = exp(log_sel_coff(2));
+
+  slx::Selex<dvar_vector> * ptr;  //Pointer to Selex base class
+  ptr = new slx::LogisticCurve<dvar_vector,dvariable>(mu,sd);
+  log_sel = ptr->logSelectivity(age);
+  delete ptr;
+  
+  slx::Selex<dvar_vector> *d;
+  d = new slx::SelectivityCoefficients<dvar_vector>(exp(log_sel_coff));
+  log_sel = d->logSelectivity(age);
+  delete d;
+
+
+
 FUNCTION get_mortality_and_survivial_rates
   int i, j;
-  // calculate the selectivity from the sel_coffs
-  //for (j=1;j<nages;j++)
-  //{
-  //  log_sel(j)=log_sel_coff(j);
-  //}
-  //// the selectivity is the same for the last two age classes
-  //log_sel(nages)=log_sel_coff(nages-1);
-
-  //selex cSelex;
-  //log_sel = cSelex.log_selcoff(log_sel_coff);
-
-  slx::Selex<dvariable>* ptr;  //pointer to selectivity
-
-  ptr = new slx::LogisticCurve<dvariable>();
-
-  cout << ptr->Selectivity(3.0) << "\n";
-
-  delete ptr;
-  exit(1);
 
   // This is the same as F(i,j)=exp(q)*effert(i)*exp(log_sel(j));
   F=outer_prod(mfexp(log_q)*effort,mfexp(log_sel));
@@ -167,6 +172,7 @@ FUNCTION get_catch_at_age
 FUNCTION evaluate_the_objective_function
   // penalty functions to ``regularize '' the solution
   f+=.01*norm2(log_relpop);
+  //f+=.01*norm2(log_sel_coff);
   avg_F=sum(F)/double(size_count(F));
   if (last_phase())
   {
