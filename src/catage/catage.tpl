@@ -119,11 +119,15 @@ FUNCTION get_selectivity
   log_sel = d->logSelectivity(age);
   delete d;
 
-  //slx::Selex<dvar_vector> *dm;
-  //dm = new slx::SelectivityCoefficients<dvar_vector>(exp(log_sel_coff));
-  //log_sel = d->logSelectivity(age);
-  //delete dm;
+  slx::Selex<dvar_vector> *dm;
+  dm = new slx::SelectivityCoefficients<dvar_vector>(exp(log_sel_coff));
+  log_sel = d->logSelexMeanOne(age);
+  delete dm;
 
+  slx::Selex<dvar_vector> * pn;  //Pointer to Selex base class
+  pn = new slx::LogisticCurve<dvar_vector,dvariable>(mu,sd);
+  log_sel = pn->logSelexMeanOne(age);
+  delete pn;
 
 
 FUNCTION get_mortality_and_survivial_rates
@@ -201,3 +205,6 @@ REPORT_SECTION
   report << obs_catch_at_age << endl; 
   report << "Estimated fishing mortality " << endl;
   report << F << endl; 
+
+  report<< "LogSel"<<endl;
+  report<< log_sel<<endl;
