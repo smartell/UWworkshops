@@ -119,6 +119,11 @@ FUNCTION get_selectivity
   log_sel = d->logSelectivity(age);
   delete d;
 
+  //slx::Selex<dvar_vector> *dm;
+  //dm = new slx::SelectivityCoefficients<dvar_vector>(exp(log_sel_coff));
+  //log_sel = d->logSelectivity(age);
+  //delete dm;
+
 
 
 FUNCTION get_mortality_and_survivial_rates

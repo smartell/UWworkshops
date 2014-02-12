@@ -16,6 +16,8 @@
  * <br> Available Selectivity options are: <br><br>
  * <br>Selectivity              FUNCTIONS                Class name
  * <br>Logistic                 plogis                   LogisticCurve
+ * <br>Nonparametric            nonparametric            SelectivityCoefficients
+ * <br>
  */
 namespace slx {
 	
@@ -38,6 +40,8 @@ namespace slx {
 		virtual  const T Selectivity(const T &x) const = 0;
 
 		virtual  const T logSelectivity(const T &x) const = 0;
+
+		virtual  const T logSelexMeanOne(const T &x) const = 0;
 		
 		virtual ~Selex(){}
 
@@ -85,6 +89,13 @@ namespace slx {
 		const T logSelectivity(const T &x) const
 		{
 			return log(slx::plogis<T>(x, this->GetMean(), this->GetStd()));
+		}
+
+		const T logSelexMeanOne(const T &x) const
+		{
+			T y = log(slx::plogis<T>(x, this->GetMean(), this->GetStd()));
+			y  -= log(mean(mfexp(y)));
+			return y;
 		}
 
 	};
@@ -145,6 +156,13 @@ namespace slx {
 		{
 			// Call the age specific function
 			return log(slx::nonparametric(x, this->GetSelCoeffs()));
+		}
+
+		const T logSelexMeanOne(const T &x) const
+		{
+			T y = log(slx::nonparametric(x, this->GetSelCoeffs()));
+			y  -= log(mean(mfexp(y)));
+			return y;
 		}
 	};
 
